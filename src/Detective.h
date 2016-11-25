@@ -17,6 +17,7 @@ struct sink {
  	string line;
  	int line_number;
  	bool taint;
+	bool inloop;
 };
 
 struct startpoint {
