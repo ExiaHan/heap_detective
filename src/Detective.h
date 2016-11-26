@@ -34,8 +34,8 @@ public:
 
 // This is array of functions names that use HEAP
 // brk(), sbrk() ? at the future
-	vector<string> heap_in = {"malloc","xmalloc","realloc","xrealloc","calloc","xcalloc","new "}; 
-	vector<string> heap_out = {"free","xfree","FREE","XFREE","delete "};
+	vector<string> heap_in = {"kmalloc","malloc","xmalloc","realloc","krealloc","xrealloc","calloc","kcalloc","xcalloc","new ","reallocarray","kreallocarray","strdup"}; 
+	vector<string> heap_out = {"free","xfree","FREE","XFREE","delete ","kfree"};
 	vector<string> loop_in = {"for","while","do"};
 	vector<string> cond = {"if","else","elseif","switch"};
 
