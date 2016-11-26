@@ -7,8 +7,7 @@ void Detective::get_sinks(string FileName)
 	string line;
 	ifstream file;
 
-	size_t pos=0,pos2=0;
-	int line_counter=0,found_char=0,count_functions=0;
+	size_t pos=0,pos2=0,line_counter=0,found_char=0,count_functions=0;
 
 	file.open(FileName);
 
@@ -27,16 +26,15 @@ void Detective::get_sinks(string FileName)
  **TODO add LOOP detector to insert loop element at struct sink..
 */
 
-
 // collect startpoint	 
 	
 			found_char = line.find_first_of('=');
 
-			if(found_char!=-1)
+			if(found_char!=string::npos)
 			{
 				count_functions=0;
 
-				while(count_functions != (signed int)heap_in.size())
+				while(count_functions != heap_in.size())
 				{
 						
 					if(line.find(heap_in[count_functions])!=string::npos)
@@ -81,35 +79,29 @@ void Detective::get_sinks(string FileName)
 
 			}			
 // collect sinks of free
-/*
-			pos2=pos-1;
 
-			while(pos2)
+			pos2=0;
+
+			while(pos2!=array.size())
 			{
 				count_functions=0;
 				
-				while(count_functions!=(signed int)heap_out.size())
+				while(count_functions!=heap_out.size())
 				{
 					if(!heap_out[count_functions].empty())
-					{
-						
-						if( line.find(heap_out[count_functions],0)!=string::npos) 
+						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos) )
 						{
-							if((signed int)line.find(array[pos2].var_name)!=-1)
-							{
-								sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
-								array[pos2].sinks.push_back(makestruct2);			
-							}	
-						}
-					}
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
+							array[pos2].sinks.push_back(makestruct2);			
+						}	
 			
 					count_functions++;
 				}
 
 	
-				pos2--;
+				pos2++;
 			}
-*/
+
 			found_char=0;	
 			line_counter++;
 		}
@@ -124,13 +116,13 @@ void Detective::view_sinks()
 
 	cout << "View sinks::\n";	
 
-	while(x != array.size()-1)
+	while(x != array.size())
 	{
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";
 
-		while(y != array[x].sinks.size()-1)
+		while(y != array[x].sinks.size())
 		{
 			cout << "\t Var name: " << array[x].sinks[y].value << "\n";			
 			cout << "\t line: " << array[x].sinks[y].line_number << ":" << array[x].sinks[y].line << "\n";

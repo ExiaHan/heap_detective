@@ -15,7 +15,7 @@ using namespace std;
 struct sink {
 	string value;
  	string line;
- 	int line_number;
+ 	size_t line_number;
  	bool taint;
 	bool inloop;
 };
@@ -23,7 +23,7 @@ struct sink {
 struct startpoint {
  	string var_name;
  	string line;
- 	int line_number;
+ 	size_t line_number;
  	vector<sink> sinks;
 };
 
