@@ -34,16 +34,16 @@ public:
 
 // This is array of functions names that use HEAP
 // brk(), sbrk() ? at the future
-	string heap_in[7] = {"malloc","xmalloc","realloc","xrealloc","calloc","xcalloc","new "}; 
-	string heap_out[5] = {"free","xfree","FREE","XFREE","delete "};
-	string loop_in[3] = {"for","while","do"};
-	string cond[4] = {"if","else","elseif","switch"};
+	vector<string> heap_in = {"malloc","xmalloc","realloc","xrealloc","calloc","xcalloc","new "}; 
+	vector<string> heap_out = {"free","xfree","FREE","XFREE","delete "};
+	vector<string> loop_in = {"for","while","do"};
+	vector<string> cond = {"if","else","elseif","switch"};
 
 	vector<startpoint> array;
 	vector<sink> sinks;
 
 	void get_sinks(string FileName);                                     
-
+	void view_sinks();                                     
 };
 
 #endif 

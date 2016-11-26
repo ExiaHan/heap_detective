@@ -17,7 +17,9 @@ int main()
 	Detective obj;
 
 	obj.get_sinks("samplers/example1.c");
-	cout << "end collect";
+	cout << "collect end\n"; 
+	obj.view_sinks();	
+	cout << "view end\n"; 
 
 	exit(0);
 }

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall --std=c++11 -O2 -fstack-protector-all
+CFLAGS=-Wall --std=c++11 -O2 -fstack-protector-all -g
 DFLAGS=-D_FORTIFY_SOURCE=2
 LDFLAGS=-Wl,-z,relro,-z,now 
 DIR=src/
