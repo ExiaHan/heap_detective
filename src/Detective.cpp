@@ -70,8 +70,6 @@ void Detective::get_sinks(string FileName)
 
 						sink makestruct = {token,line,line_counter,false,false};
 						array[pos2].sinks.push_back(makestruct);
-						
-
 					}
 					pos2++;
 				}	
@@ -79,7 +77,6 @@ void Detective::get_sinks(string FileName)
 
 			}			
 // collect sinks of free
-
 			pos2=0;
 
 			while(pos2!=array.size())
@@ -98,7 +95,6 @@ void Detective::get_sinks(string FileName)
 					count_functions++;
 				}
 
-	
 				pos2++;
 			}
 
@@ -114,10 +110,10 @@ void Detective::view_sinks()
 {
 	size_t x=0,y=0;
 
-	cout << "View sinks::\n";	
-
 	while(x != array.size())
 	{
+
+		cout << "\nHeap:actions::\n:::::::::::::::::::::::\n";	
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";
@@ -131,8 +127,7 @@ void Detective::view_sinks()
 			y++;
 		}
 
-		y=0;
-			
+		y=0;			
 		x++;
 	}
 
