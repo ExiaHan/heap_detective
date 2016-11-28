@@ -45,7 +45,6 @@ void Detective::get_sinks(string FileName)
 						token = str.next();
       		
  						array.push_back(startpoint());
-						array[pos].sinks.push_back(sink());
 						array[pos].var_name = token;
 						array[pos].line = line;
 						array[pos].line_number = line_counter;
@@ -113,7 +112,7 @@ void Detective::view_sinks()
 	while(x != array.size())
 	{
 
-		cout << "\nHeap:actions::\n:::::::::::::::::::::::\n";	
+		cout << "\nHeap:action::\n:::::::::::::::::::::::\n";	
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";
