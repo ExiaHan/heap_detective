@@ -1,4 +1,6 @@
 # heap_detective
 Simple way to detect use after free, double free and memory leaks in C/C++ code.
 
+PoC version look directory samplers...
+
 At construction...
