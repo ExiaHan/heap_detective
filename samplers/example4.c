@@ -3,7 +3,9 @@
 
 int main(void)
 {   
-	char *ch_ptr = malloc(100);
+	char *ch_ptr = NULL;
+
+	ch_ptr = malloc(100);
 	int i=0;
 
 	while (i < 99) 

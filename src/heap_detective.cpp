@@ -10,7 +10,8 @@ int main()
 {
 	Detective obj;
 
-	obj.get_sinks("samplers/example1.c");
+	obj.set_target_path("samplers/");
+	obj.get_all_sinks();
 	cout << "collect end\n"; 
 	obj.view_sinks();	
 	cout << "view end\n"; 

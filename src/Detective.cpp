@@ -2,12 +2,46 @@
 #include "Detective.h"
 using namespace std;
 
+
+void Detective::set_target_path(string path)
+{
+	const bool showHiddenDirs = false;
+    	DIR *path_dir;
+    	struct dirent *tmp;
+    	path_dir = opendir(path.c_str());
+
+    	if(path_dir != NULL)	
+        	while((tmp = readdir(path_dir)) != NULL)
+		{
+            		if(showHiddenDirs ? (tmp->d_type==DT_DIR && string(tmp->d_name) != ".." && string(tmp->d_name) != "." ) : (tmp->d_type==DT_DIR && strstr(tmp->d_name,"..") == NULL && strstr(tmp->d_name,".") == NULL ) )
+                		set_target_path(path+tmp->d_name+"/");
+            		
+            		if(tmp->d_type==DT_REG)
+               			files_path.push_back(path+tmp->d_name);
+            		
+        	}
+
+    	closedir(path_dir);
+}
+
+void Detective::get_all_sinks()
+{
+	size_t len_list=files_path.size(),x=0;
+
+	while(x != len_list)
+	{
+		get_sinks(files_path[x]);
+		x++;
+	}
+}
+
+
 void Detective::get_sinks(string FileName)
 {
 	string line;
 	ifstream file;
 
-	size_t pos=0,pos2=0,line_counter=0,found_char=0,count_functions=0;
+	size_t pos2=0,line_counter=0,found_char=0,count_functions=0;
 
 	file.open(FileName);
 
@@ -45,6 +79,7 @@ void Detective::get_sinks(string FileName)
 						token = str.next();
       		
  						array.push_back(startpoint());
+						array[pos].filename = FileName;
 						array[pos].var_name = token;
 						array[pos].line = line;
 						array[pos].line_number = line_counter;
@@ -113,6 +148,7 @@ void Detective::view_sinks()
 	{
 
 		cout << "\nHeap:action::\n:::::::::::::::::::::::\n";	
+		cout << "File path: " << array[x].filename << "\n";			
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";

@@ -3,10 +3,10 @@
 
 int main(void)
 {   
-	char *ch_ptr = malloc(100);
-	int i;
+	char *ch_ptr = NULL; 
+	ch_ptr=malloc(100);
 
-	for (i = 0; i < 99; i++) 
+	for (int i = 0; i < 99; i++) 
 	{
 		ch_ptr = 'A';
 		free(ch_ptr);

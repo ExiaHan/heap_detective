@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-const std::string DEFAULT_DELIMITER = " \t\v\n\r\f";
+const std::string DEFAULT_DELIMITER = " \t\v\n\r\f=";
 class Tokenizer
 {
 public:
