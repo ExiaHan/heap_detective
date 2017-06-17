@@ -41,7 +41,8 @@ void Detective::get_sinks(string FileName)
 	string line;
 	ifstream file;
 
-	size_t pos2=0,line_counter=0,found_char=0,count_functions=0;
+	bool test=false;
+	size_t pos2=0,pos3=0,line_counter=1,found_char=0,count_functions=0;
 
 	file.open(FileName);
 
@@ -68,6 +69,7 @@ void Detective::get_sinks(string FileName)
 			{
 				count_functions=0;
 
+				test=false;
 				while(count_functions != heap_in.size())
 				{
 						
@@ -83,6 +85,8 @@ void Detective::get_sinks(string FileName)
 						array[pos].var_name = token;
 						array[pos].line = line;
 						array[pos].line_number = line_counter;
+						test=true;
+						pos3=pos;
 						pos++;
 					}
 
@@ -91,11 +95,8 @@ void Detective::get_sinks(string FileName)
 
 				
 // collect sinks			
-	
-				while(pos2!=array.size())
-				{
-											
-					if( line.find(array[pos2].var_name)!=string::npos )
+				if(test==false)						
+					if( line.find(array[pos3].var_name)!=string::npos )
 					{
 						Tokenizer str;
 						string token;
@@ -103,11 +104,8 @@ void Detective::get_sinks(string FileName)
 						token = str.next();
 
 						sink makestruct = {token,line,line_counter,false,false};
-						array[pos2].sinks.push_back(makestruct);
+						array[pos3].sinks.push_back(makestruct);
 					}
-					pos2++;
-				}	
-				pos2=0;
 
 			}			
 // collect sinks of free
@@ -123,7 +121,8 @@ void Detective::get_sinks(string FileName)
 						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos) )
 						{
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
-							array[pos2].sinks.push_back(makestruct2);			
+							array[pos3].sinks.push_back(makestruct2);
+							goto END_VIEW_DETECTIVE;			
 						}	
 			
 					count_functions++;
@@ -131,6 +130,8 @@ void Detective::get_sinks(string FileName)
 
 				pos2++;
 			}
+
+			END_VIEW_DETECTIVE:
 
 			found_char=0;	
 			line_counter++;
