@@ -119,9 +119,9 @@ void Detective::get_sinks(string FileName)
 				while(count_functions!=heap_out.size())
 				{
 					if(!heap_out[count_functions].empty())
-						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos3].var_name)!=string::npos) )
+						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos) )
 						{
-							sink makestruct2 = {array[pos3].var_name,line,line_counter,false,false};
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
 							array[pos3].sinks.push_back(makestruct2);
 							goto END_VIEW_DETECTIVE;			
 						}	
