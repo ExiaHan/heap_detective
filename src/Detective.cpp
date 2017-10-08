@@ -97,7 +97,7 @@ void Detective::get_sinks(string FileName)
 							pos3=pos;
 							pos++;
 						} else {
-							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in files_path var");
+							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array vector var");
 							exit(0);
 						}
 					}
