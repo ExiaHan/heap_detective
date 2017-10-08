@@ -17,8 +17,14 @@ void Detective::set_target_path(string path)
                 		set_target_path(path+tmp->d_name+"/");
             		
             		if(tmp->d_type==DT_REG)
-               			files_path.push_back(path+tmp->d_name);
-            		
+			{ 
+				if (files_path.size() != SIZE_MAX)
+               				files_path.push_back(path+tmp->d_name);
+				else {
+					HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in files_path var");
+					exit(0);
+				}
+            		}
         	}
 
     	closedir(path_dir);
@@ -80,15 +86,20 @@ void Detective::get_sinks(string FileName)
 						string token;
 						str.set(line);
 						token = str.next();
-      		
- 						array.push_back(startpoint());
-						array[pos].filename = FileName;
-						array[pos].var_name = token;
-						array[pos].line = line;
-						array[pos].line_number = line_counter;
-						test=true;
-						pos3=pos;
-						pos++;
+      						if(array.size() != SIZE_MAX)
+						{	
+ 							array.push_back(startpoint());
+							array[pos].filename = FileName;
+							array[pos].var_name = token;
+							array[pos].line = line;
+							array[pos].line_number = line_counter;
+							test=true;
+							pos3=pos;
+							pos++;
+						} else {
+							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in files_path var");
+							exit(0);
+						}
 					}
 
 					count_functions++;
@@ -103,9 +114,16 @@ void Detective::get_sinks(string FileName)
 						string token;
 						str.set(line);
 						token = str.next();
-
+				
 						sink makestruct = {token,line,line_counter,false,false};
-						array[pos3].sinks.push_back(makestruct);
+
+      						if(array[pos3].sinks.size() != SIZE_MAX)
+							array[pos3].sinks.push_back(makestruct);
+						else {
+							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
+							exit(0);	
+						}
+							
 					}
 
 			}			
@@ -122,7 +140,13 @@ void Detective::get_sinks(string FileName)
 						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos)&&(array[pos3].filename==array[pos2].filename) )
 						{
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
-							array[pos2].sinks.push_back(makestruct2);
+
+      							if(array[pos3].sinks.size() != SIZE_MAX) 	
+								array[pos2].sinks.push_back(makestruct2);
+							else {
+								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
+								exit(0);
+							}
 							goto END_VIEW_DETECTIVE;			
 						}	
 			
