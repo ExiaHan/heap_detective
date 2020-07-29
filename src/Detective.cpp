@@ -107,7 +107,7 @@ void Detective::get_sinks(string FileName)
 
 				
 // collect sinks			
-				if(test==false)						
+				if(test==true)        				
 					if( line.find(array[pos3].var_name)!=string::npos )
 					{
 						Tokenizer str;
