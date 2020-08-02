@@ -96,7 +96,7 @@ void Detective::get_sinks(string FileName)
 	string line;
 	ifstream file;
 
-	bool test=false;
+	//bool test=false;
 	size_t pos2=0,pos3=0,line_counter=1,found_char=0,count_functions=0;
 
 	file.open(FileName);
@@ -108,7 +108,7 @@ void Detective::get_sinks(string FileName)
 			return;
 		}
 
-	test=false;	
+	//test=false;	
 
 		while(getline(file, line))
 		{
@@ -118,7 +118,7 @@ void Detective::get_sinks(string FileName)
 */
 			loop_counter+=loop_check(line)==true?1:0;
 			loop_counter-=(end_exp(line)==true)?1:0;
-
+			bool heap_test=false;
 			// loop_counter+=cond_check(line)==true?1:0;
 // collect startpoint	 
 	
@@ -128,7 +128,7 @@ void Detective::get_sinks(string FileName)
 			{
 				count_functions=0;
 
-				test=false;
+				//test=false;
 
 				while(count_functions != heap_in.size())
 				{
@@ -147,7 +147,7 @@ void Detective::get_sinks(string FileName)
 							array[pos].line = line;
 							array[pos].line_number = line_counter;
 							// array[pos].inloop=loop_counter>=1?true:false;
-							test=true;
+							//test=true;
 							pos3=pos;
 							pos++;
 						} else {
@@ -184,6 +184,7 @@ void Detective::get_sinks(string FileName)
 			}			
 // collect sinks of free
 			pos2=0;
+			heap_test=false;
 
 			while(pos2!=array.size())
 			{
@@ -218,8 +219,10 @@ void Detective::get_sinks(string FileName)
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
 
       							if(array[pos3].sinks.size() != SIZE_MAX) 	
+							{
 								array[pos2].sinks.push_back(makestruct2);
-							else {
+							        heap_test=true;
+							} else {
 								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
 								exit(0);
 							}
@@ -228,7 +231,14 @@ void Detective::get_sinks(string FileName)
 			
 					count_functions++;
 				}
-
+				if(heap_test==false)
+				{
+					if(line.find(array[pos2].var_name)!=string::npos)
+					{
+						sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
+						array[pos2].sinks.push_back(makestruct2);
+					}
+				}
 
 				pos2++;
 			}
