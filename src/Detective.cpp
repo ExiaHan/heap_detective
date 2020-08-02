@@ -3,6 +3,55 @@
 using namespace std;
 
 
+
+bool Detective::end_exp(string line)
+{
+	bool test=false;
+
+		if(line.find("}")!=string::npos)
+		{
+			test=true;
+		}
+
+	return test;
+}
+
+bool Detective::loop_check(string line)
+{
+
+	int x=0;
+	bool test=false;
+
+	while(x != int(loop_in.size()))
+	{					
+		if(line.find(loop_in[x])!=string::npos)
+		{
+			test=true;
+		}
+		x++;
+	}
+
+	return test;
+}
+
+bool Detective::condition_check(string line)
+{
+
+	int x=0;
+	bool test=false;
+
+	while(x != int(cond.size()))
+	{					
+		if(line.find(cond[x])!=string::npos)
+		{
+			test=true;
+		}
+		x++;
+	}
+
+	return test;
+}
+
 void Detective::set_target_path(string path)
 {
 	const bool showHiddenDirs = false;
@@ -58,7 +107,8 @@ void Detective::get_sinks(string FileName)
 			file.clear();
 			return;
 		}
-	
+
+	test=false;	
 
 		while(getline(file, line))
 		{
@@ -66,7 +116,10 @@ void Detective::get_sinks(string FileName)
 /*
  **TODO add LOOP detector to insert loop element at struct sink..
 */
+			loop_counter+=loop_check(line)==true?1:0;
+			loop_counter-=(end_exp(line)==true)?1:0;
 
+			// loop_counter+=cond_check(line)==true?1:0;
 // collect startpoint	 
 	
 			found_char = line.find_first_of('=');
@@ -93,6 +146,7 @@ void Detective::get_sinks(string FileName)
 							array[pos].var_name = token;
 							array[pos].line = line;
 							array[pos].line_number = line_counter;
+							// array[pos].inloop=loop_counter>=1?true:false;
 							test=true;
 							pos3=pos;
 							pos++;
@@ -106,8 +160,9 @@ void Detective::get_sinks(string FileName)
 				}
 
 				
-// collect sinks			
-				if(test==true)        				
+// collect sinks	
+		/*
+				if(test==true) 
 					if( line.find(array[pos3].var_name)!=string::npos )
 					{
 						Tokenizer str;
@@ -115,7 +170,7 @@ void Detective::get_sinks(string FileName)
 						str.set(line);
 						token = str.next();
 				
-						sink makestruct = {token,line,line_counter,false,false};
+						sink makestruct = {token,line,line_counter,false,loop_counter>=1?true:false};
 
       						if(array[pos3].sinks.size() != SIZE_MAX)
 							array[pos3].sinks.push_back(makestruct);
@@ -125,7 +180,7 @@ void Detective::get_sinks(string FileName)
 						}
 							
 					}
-
+	*/
 			}			
 // collect sinks of free
 			pos2=0;
@@ -139,7 +194,7 @@ void Detective::get_sinks(string FileName)
 					if(!heap_out[count_functions].empty())
 						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos)&&(array[pos3].filename==array[pos2].filename) )
 						{
-							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,false};
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
 
       							if(array[pos3].sinks.size() != SIZE_MAX) 	
 								array[pos2].sinks.push_back(makestruct2);
@@ -153,6 +208,28 @@ void Detective::get_sinks(string FileName)
 					count_functions++;
 				}
 
+				count_functions=0;
+// return ocurrences of var of same name....
+				while(count_functions!=heap_in.size())
+				{
+					if(!heap_in[count_functions].empty())
+						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos)&&(array[pos3].filename==array[pos2].filename) )
+						{
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
+
+      							if(array[pos3].sinks.size() != SIZE_MAX) 	
+								array[pos2].sinks.push_back(makestruct2);
+							else {
+								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
+								exit(0);
+							}
+							goto END_VIEW_DETECTIVE;			
+						}	
+			
+					count_functions++;
+				}
+
+
 				pos2++;
 			}
 
@@ -160,9 +237,11 @@ void Detective::get_sinks(string FileName)
 
 			found_char=0;	
 			line_counter++;
+
+			//loop_counter-=(end_exp(line)==true)?1:0;
 		}
 
-
+        loop_counter=0;
 	file.close();
 }
 
@@ -173,7 +252,7 @@ void Detective::view_sinks()
 	while(x != array.size())
 	{
 
-		cout << "\nHeap:action::\n:::::::::::::::::::::::\n";	
+		cout << "\n \u001b[4m\u001b[44m ...::: Heap static route :::...  \u001b[0m\n";	
 		cout << "File path: " << array[x].filename << "\n";			
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
@@ -181,10 +260,10 @@ void Detective::view_sinks()
 
 		while(y != array[x].sinks.size())
 		{
-			cout << "\t Var name: " << array[x].sinks[y].value << "\n";			
+			//cout << "\t Var name: " << array[x].sinks[y].value << "\n";			
 			cout << "\t line: " << array[x].sinks[y].line_number << ":" << array[x].sinks[y].line << "\n";
-			cout << "\t Taint: " << ((array[x].sinks[y].taint==true)?"true":"false") << "\n";	
-			cout << "\t In Loop: " << ((array[x].sinks[y].inloop==true)?"true":"false") << "\n";
+			cout << "\t Taint: " << ((array[x].sinks[y].taint==true)?"\u001b[41;1m True \u001b[0m":"false") << "\n";	
+			cout << "\t In Loop: " << ((array[x].sinks[y].inloop==true)?"\u001b[46;1m True \u001b[0m":"false") << "\n";
 			y++;
 		}
 
