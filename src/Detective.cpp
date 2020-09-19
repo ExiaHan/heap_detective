@@ -163,14 +163,15 @@ void Detective::get_sinks(string FileName)
 			while(pos2!=array.size())
 			{
 				count_functions=0;
-			
+				have_var=false;
+				filename_test=false;	
 
 // check the use of var tainted
 				if(line.find(array[pos2].var_name)!=string::npos)
 				{
 					have_var=true;
 					filename_test=(array[pos3].filename==array[pos2].filename)?true:false;
-				}
+				} 
 // Check heap array list
 				while(count_functions!=heap_in.size())
 				{
@@ -221,9 +222,11 @@ void Detective::get_sinks(string FileName)
 				{
 					sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
 					array[pos3].sinks.push_back(makestruct2);
+
 					goto END_VIEW_DETECTIVE;
 				}
-
+				have_var=false;
+				filename_test=false;
 				pos2++;
 			}
 
