@@ -67,7 +67,7 @@ int main()
             	break;
         }
 
-    if(opens>closes)
+    if(opens!=closes)
 	puts("\n Here be dragons here!\n");
     else
 	puts("\n Cannot detect pitfalls here!");
