@@ -95,8 +95,7 @@ void Detective::get_sinks(string FileName)
 {
 	string line;
 	ifstream file;
-
-	//bool test=false;
+	bool have_var=false,filename_test=false;	
 	size_t pos2=0,pos3=0,line_counter=1,found_char=0,count_functions=0;
 
 	file.open(FileName);
@@ -118,7 +117,7 @@ void Detective::get_sinks(string FileName)
 */
 			loop_counter+=loop_check(line)==true?1:0;
 			loop_counter-=(end_exp(line)==true)?1:0;
-			bool heap_test=false;
+			have_var=false;
 			// loop_counter+=cond_check(line)==true?1:0;
 // collect startpoint	 
 	
@@ -128,7 +127,6 @@ void Detective::get_sinks(string FileName)
 			{
 				count_functions=0;
 
-				//test=false;
 
 				while(count_functions != heap_in.size())
 				{
@@ -146,8 +144,6 @@ void Detective::get_sinks(string FileName)
 							array[pos].var_name = token;
 							array[pos].line = line;
 							array[pos].line_number = line_counter;
-							// array[pos].inloop=loop_counter>=1?true:false;
-							//test=true;
 							pos3=pos;
 							pos++;
 						} else {
@@ -159,69 +155,34 @@ void Detective::get_sinks(string FileName)
 					count_functions++;
 				}
 
-				
+					
 // collect sinks	
-		/*
-				if(test==true) 
-					if( line.find(array[pos3].var_name)!=string::npos )
-					{
-						Tokenizer str;
-						string token;
-						str.set(line);
-						token = str.next();
-				
-						sink makestruct = {token,line,line_counter,false,loop_counter>=1?true:false};
-
-      						if(array[pos3].sinks.size() != SIZE_MAX)
-							array[pos3].sinks.push_back(makestruct);
-						else {
-							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
-							exit(0);	
-						}
-							
-					}
-	*/
 			}			
-// collect sinks of free
 			pos2=0;
-			heap_test=false;
 
 			while(pos2!=array.size())
 			{
 				count_functions=0;
-				
-				while(count_functions!=heap_out.size())
-				{
-					if(!heap_out[count_functions].empty())
-						if ( (line.find(heap_out[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos)&&(array[pos3].filename==array[pos2].filename) )
-						{
-							sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
-
-      							if(array[pos3].sinks.size() != SIZE_MAX) 	
-								array[pos2].sinks.push_back(makestruct2);
-							else {
-								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
-								exit(0);
-							}
-							goto END_VIEW_DETECTIVE;			
-						}	
 			
-					count_functions++;
-				}
 
-				count_functions=0;
-// return ocurrences of var of same name....
+// check the use of var tainted
+				if(line.find(array[pos2].var_name)!=string::npos)
+				{
+					have_var=true;
+					filename_test=(array[pos3].filename==array[pos2].filename)?true:false;
+				}
+// Check heap array list
 				while(count_functions!=heap_in.size())
 				{
 					if(!heap_in[count_functions].empty())
-						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (line.find(array[pos2].var_name)!=string::npos)&&(array[pos3].filename==array[pos2].filename) )
+						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (filename_test==true) && (have_var==true))
 						{
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
 
       							if(array[pos3].sinks.size() != SIZE_MAX) 	
 							{
-								array[pos2].sinks.push_back(makestruct2);
-							        heap_test=true;
+								array[pos3].sinks.push_back(makestruct2);
+							        goto END_VIEW_DETECTIVE;
 							} else {
 								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
 								exit(0);
@@ -231,13 +192,36 @@ void Detective::get_sinks(string FileName)
 			
 					count_functions++;
 				}
-				if(heap_test==false)
+				
+				count_functions=0;
+// collect free
+				while(count_functions!=heap_out.size())
 				{
-					if(line.find(array[pos2].var_name)!=string::npos)
-					{
-						sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
-						array[pos2].sinks.push_back(makestruct2);
-					}
+					if(!heap_out[count_functions].empty())
+						if ( (line.find(heap_out[count_functions],0)!=string::npos)&&(filename_test==true)&&(have_var==true) )
+						{
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
+
+      							if(array[pos3].sinks.size() != SIZE_MAX)
+							{
+									array[pos3].sinks.push_back(makestruct2);
+									goto END_VIEW_DETECTIVE;
+							} else {
+								HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array.sinks vector");
+								exit(0);
+							}
+							goto END_VIEW_DETECTIVE;			
+						}	
+			
+					count_functions++;
+				}
+				count_functions=0;
+
+				if(have_var==true && filename_test==true)
+				{
+					sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
+					array[pos3].sinks.push_back(makestruct2);
+					goto END_VIEW_DETECTIVE;
 				}
 
 				pos2++;
