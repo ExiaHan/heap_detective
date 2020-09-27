@@ -60,12 +60,12 @@ public:
 	bool loop_status=false;
 	bool cond_status=false;
 	int loop_counter=0;
-	
  	bool end_exp(string line);
 	void set_target_path(string path);
 	void get_all_sinks();
 	void get_sinks(string FileName);                                     
-	void view_sinks();                                     
+	void view_sinks();   
+	void clear_sinks();                                     
         bool loop_check(string line);
         bool condition_check(string line);
 	// todo add flow end check

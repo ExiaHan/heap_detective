@@ -98,6 +98,9 @@ void Detective::get_sinks(string FileName)
 	bool have_var=false,filename_test=false;	
 	size_t pos2=0,pos3=0,line_counter=1,found_char=0,count_functions=0;
 
+
+	sinks.clear();
+
 	file.open(FileName);
 
 		if(file.fail())
@@ -269,4 +272,15 @@ void Detective::view_sinks()
 	}
 
 
+}
+
+void Detective::clear_sinks()
+{
+	array.clear();
+	files_path.clear();
+        sinks.clear();
+	heap_in.clear();
+	heap_out.clear();
+	loop_in.clear();
+	cond.clear();
 }
