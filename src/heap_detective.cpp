@@ -6,17 +6,32 @@
 using namespace std; 
 
 
-int main() 
+int main(int argc, char* argv[]) 
 {
-	Detective *obj= new Detective;
 
-	obj->set_target_path("samplers/");
-	obj->get_all_sinks();
-	cout << "collect end\n"; 
-	obj->view_sinks();	
-	cout << "view end\n"; 
-        obj->clear_sinks();
-	delete obj;
+	if(argc < 2) 
+	{
+		std::cerr << "Please Follow the command to run: ./bin/heap_detective DIRECTORY_NAME_to_audit" << std::endl;
+		cout << "\n Heap Detective version 0.1 \n";
+		exit(0);	
+	}
+
+	try {
+		Detective *obj= new Detective;
+		obj->set_target_path(argv[1]);
+		obj->get_all_sinks();
+		cout << "collect end\n"; 
+		obj->view_sinks();	
+		cout << "view end\n"; 
+        	obj->clear_sinks();
+		delete obj;
+
+	} catch (const char* msg) {
+
+		cerr << msg << endl;
+	}
+
+
 	exit(0);
 }
 
