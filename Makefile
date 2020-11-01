@@ -1,13 +1,18 @@
 CC=g++
-CFLAGS=-Wall --std=c++11 -O2 -fstack-protector-all
-DFLAGS=-D_FORTIFY_SOURCE=2
-LDFLAGS=-Wl,-z,relro,-z,now 
+CFLAGS=-Wall --std=c++11 -O2 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	LDFLAGS=-Wl 
+else
+	LDFLAGS=-Wl,-z,relro,-z,now -D_FORTIFY_SOURCE=2
+endif
+
 DIR=src/
 DIROUT=bin/
-
+HARDENING= -mmitigate-rop -fstack-protector-all -pie -fPIE -ftrapv
 
 mem_audit: $(DIR)heap_detective.cpp
-	$(CC) $(CFLAGS) $(DFLAGS) -c $(DIR)*.cpp
+	$(CC) $(CFLAGS) $(DFLAGS) -c $(DIR)*.cpp $(HARDENING)
 	$(CC) -o $(DIROUT)heap_detective *.o $(LDFLAGS)
 	rm *.o
 
