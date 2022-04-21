@@ -169,6 +169,8 @@ void Detective::get_sinks(string FileName)
 				have_var=false;
 				filename_test=false;	
 
+				
+
 // check the use of var tainted
 				if(line.find(array[pos2].var_name)!=string::npos)
 				{
@@ -179,7 +181,7 @@ void Detective::get_sinks(string FileName)
 				while(count_functions!=heap_in.size())
 				{
 					if(!heap_in[count_functions].empty())
-						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (filename_test==true) && (have_var==true))
+						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (filename_test==true) && (have_var==true) && (line.find(array[pos3].var_name,0)!=string::npos))
 						{
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
 
@@ -202,7 +204,7 @@ void Detective::get_sinks(string FileName)
 				while(count_functions!=heap_out.size())
 				{
 					if(!heap_out[count_functions].empty())
-						if ( (line.find(heap_out[count_functions],0)!=string::npos)&&(filename_test==true)&&(have_var==true) )
+						if ( (line.find(heap_out[count_functions],0)!=string::npos)&&(filename_test==true)&&(have_var==true) && (line.find(array[pos3].var_name,0)!=string::npos))
 						{
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
 
@@ -221,7 +223,7 @@ void Detective::get_sinks(string FileName)
 				}
 				count_functions=0;
 
-				if(have_var==true && filename_test==true)
+				if(have_var==true && filename_test==true && (line.find(array[pos3].var_name,0)!=string::npos))
 				{
 					sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
 					array[pos3].sinks.push_back(makestruct2);
@@ -258,9 +260,9 @@ void Detective::view_sinks()
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";
 
-		while(y != array[x].sinks.size())
+		while(y != array[x].sinks.size() )
 		{
-			//cout << "\t Var name: " << array[x].sinks[y].value << "\n";			
+//			cout << "\t Var name: " << array[x].sinks[y].value << "\n";			
 			cout << "\t line: " << array[x].sinks[y].line_number << ":" << array[x].sinks[y].line << "\n";
 			cout << "\t Taint: " << ((array[x].sinks[y].taint==true)?"\u001b[41;1m True \u001b[0m":"false") << "\n";	
 			cout << "\t In Loop: " << ((array[x].sinks[y].inloop==true)?"\u001b[46;1m True \u001b[0m":"false") << "\n";
