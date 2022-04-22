@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	if(argc < 2) 
 	{
 		std::cerr << "Please Follow the command to run: ./bin/heap_detective DIRECTORY_NAME_to_audit" << std::endl;
-		cout << "\n Heap Detective version 0.1 \n";
+		cout << "\n Heap Detective version 0.2 \n";
 		exit(0);	
 	}
 
