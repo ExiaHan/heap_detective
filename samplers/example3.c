@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 
 	array = new int[100];
 
-	delete [] array;
+	delete array;
 
 	array=(int *)2;
    
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 		free(array3);
 	}
 
-	
+	array=malloc(1);
 
 	return 0;
 }

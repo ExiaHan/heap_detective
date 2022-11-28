@@ -1,17 +1,14 @@
+// Coded by CoolerVoid
 #include "Tokenizer.h"
 #include "Detective.h"
 using namespace std;
-
-
 
 bool Detective::end_exp(string line)
 {
 	bool test=false;
 
 		if(line.find("}")!=string::npos)
-		{
 			test=true;
-		}
 
 	return test;
 }
@@ -25,9 +22,7 @@ bool Detective::loop_check(string line)
 	while(x != int(loop_in.size()))
 	{					
 		if(line.find(loop_in[x])!=string::npos)
-		{
 			test=true;
-		}
 		x++;
 	}
 
@@ -43,9 +38,7 @@ bool Detective::condition_check(string line)
 	while(x != int(cond.size()))
 	{					
 		if(line.find(cond[x])!=string::npos)
-		{
 			test=true;
-		}
 		x++;
 	}
 
@@ -183,7 +176,7 @@ void Detective::get_sinks(string FileName)
 					if(!heap_in[count_functions].empty())
 						if ( (line.find(heap_in[count_functions],0)!=string::npos) && (filename_test==true) && (have_var==true) && (line.find(array[pos3].var_name,0)!=string::npos))
 						{
-							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false,false,true};
 
       							if(array[pos3].sinks.size() != SIZE_MAX) 	
 							{
@@ -206,7 +199,7 @@ void Detective::get_sinks(string FileName)
 					if(!heap_out[count_functions].empty())
 						if ( (line.find(heap_out[count_functions],0)!=string::npos)&&(filename_test==true)&&(have_var==true) && (line.find(array[pos3].var_name,0)!=string::npos))
 						{
-							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false};
+							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false,true,false};
 
       							if(array[pos3].sinks.size() != SIZE_MAX)
 							{
@@ -225,7 +218,7 @@ void Detective::get_sinks(string FileName)
 
 				if(have_var==true && filename_test==true && (line.find(array[pos3].var_name,0)!=string::npos))
 				{
-					sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false};
+					sink makestruct2 = {array[pos2].var_name,line,line_counter,false,loop_counter>=1?true:false,false,false};
 					array[pos3].sinks.push_back(makestruct2);
 
 					goto END_VIEW_DETECTIVE;
@@ -276,6 +269,119 @@ void Detective::view_sinks()
 
 }
 
+
+void Detective::list_var_by_filename(string filename, string varname)
+{
+
+	size_t x=0,y=0;
+
+	if(array.empty())
+		return;
+	while(x != array.size())
+	{
+
+		if((!strcmp(array[x].filename.c_str(),filename.c_str())) && !strcmp(array[x].var_name.c_str(),varname.c_str()))
+		{
+
+			cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";		
+
+			while ( y != array[x].sinks.size()) 
+			{
+				if(array[x].sinks[y].line_number != array[x].line_number && array[x].sinks[y].line_number != array[x].sinks[y-1].line_number)
+					cout << "line: " << array[x].sinks[y].line_number << ":" << array[x].sinks[y].line << "\n";
+				y++;
+			}
+			y=0;
+		}
+		x++;
+	}
+
+}
+
+
+
+void Detective::double_free()
+{
+	size_t x=0,y=0;
+	short int counter_free=0;
+
+	while(x != array.size())
+	{
+
+		while(y != array[x].sinks.size() )
+		{
+
+			if(array[x].sinks[y].liberate==true)
+				counter_free+=array[x].sinks[y].inloop==true?5:1;
+		
+			if(counter_free>=2)
+			{
+				cout << "\n \u001b[4m\u001b[44m ...::: Double free analyser :::...  \u001b[0m\n";	
+				cout << "File path: " << array[x].filename << "\n";		
+				cout << "\u001b[41;1m Double free found! \u001b[0m \n";	
+
+				if(counter_free>=5)
+					cout << "Maybe the function to liberate memory can be in a loop context!\n";
+
+				list_var_by_filename(array[x].filename , array[x].var_name );			
+				counter_free=0;
+			}
+			y++;
+		}
+		counter_free=0;
+		y=0;			
+		x++;
+	}
+}
+
+
+
+
+void Detective::use_after_free()
+{
+	size_t x=0,y=0;
+	short int counter_free=0;
+	size_t number_line=0;
+	string last_var="";
+	string free_line="";
+
+	while(x != array.size())
+	{
+
+		while(y != array[x].sinks.size() )
+		{
+
+			if(counter_free && array[x].line_number != array[x].sinks[y].line_number )
+			{
+
+				if((!strcmp(array[x].var_name.c_str(),last_var.c_str())) && number_line > array[x].line_number && number_line < array[x].sinks[y].line_number )
+				{
+
+
+					cout << "\n \u001b[4m\u001b[44m ...::: Use after free analyser :::...  \u001b[0m\n";	
+					cout << "File path: " << array[x].filename << "\n";		
+					cout << "\u001b[41;1m Use after free found \u001b[0m \n";
+					list_var_by_filename(array[x].filename , array[x].var_name );			
+				}		
+			}
+
+
+			if(array[x].sinks[y].liberate==true)
+			{
+				counter_free+=1;
+				last_var=array[x].var_name;
+				free_line=array[x].sinks[y].line;
+				number_line=array[x].sinks[y].line_number;
+			}
+			y++;
+		}
+//		counter_free=0;
+		y=0;			
+		x++;
+	}
+}
+
+// free all context from memory
 void Detective::clear_sinks()
 {
 	array.clear();

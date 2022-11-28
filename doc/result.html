@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- This file was created with the aha Ansi HTML Adapter. https://github.com/theZiz/aha -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xml+xhtml; charset=UTF-8"/>
+<title>stdin</title>
+</head>
+<body style="color:white; background-color:black">
+<pre>
+Collect action done
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example5.c
+Var name: ch_ptr
+line: 8:	ch_ptr = malloc(100);
+Sinks: 
+	 line: 8:	ch_ptr = malloc(100);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 11:	free(ch_ptr);	
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 12:	free(ch_ptr);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 6:	char *ch_ptr = NULL; 
+	 Taint: false
+	 In Loop: false
+	 line: 6:	char *ch_ptr = NULL;
+	 Taint: false
+	 In Loop: false
+	 line: 6:	char *ch_ptr = NULL;
+	 Taint: false
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example2.c
+Var name: ch_ptr
+line: 7:	ch_ptr=malloc(100);
+Sinks: 
+	 line: 7:	ch_ptr=malloc(100);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 11:		ch_ptr = 'A';
+	 Taint: false
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+	 line: 12:		free(ch_ptr);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+	 line: 13:		printf(&quot;%s\n&quot;, ch_ptr);
+	 Taint: false
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example3.c
+Var name: array
+line: 10:	array = new int[100];
+Sinks: 
+	 line: 10:	array = new int[100];
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 12:	delete array;
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 14:	array=(int *)2;
+	 Taint: false
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example3.c
+Var name: array3
+line: 18:	array3=realloc(400);
+Sinks: 
+	 line: 18:	array3=realloc(400);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 22:		array3='1';
+	 Taint: false
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+	 line: 24:		free(array3);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example3.c
+Var name: array
+line: 27:	array=malloc(1);
+Sinks: 
+	 line: 27:	array=malloc(1);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example4.c
+Var name: ch_ptr
+line: 8:	ch_ptr = malloc(100);
+Sinks: 
+	 line: 8:	ch_ptr = malloc(100);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 13:		ch_ptr = 'A';
+	 Taint: false
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+	 line: 14:		free(ch_ptr);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+	 line: 15:		printf(&quot;%s\n&quot;, ch_ptr);
+	 Taint: false
+	 In Loop: <span style="font-weight:bold;background-color:aqua;"> True </span>
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example1.c
+Var name: buf1R1
+line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+Sinks: 
+	 line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example1.c
+Var name: buf2R1
+line: 14:    buf2R1 = (char *) malloc(BUFSIZER1);
+Sinks: 
+	 line: 14:    buf2R1 = (char *) malloc(BUFSIZER1);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 16:    free(buf2R1);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example1.c
+Var name: buf2R2
+line: 18:    buf2R2 = (char *) malloc(BUFSIZER2);
+Sinks: 
+	 line: 18:    buf2R2 = (char *) malloc(BUFSIZER2);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example1.c
+Var name: buf3R2
+line: 19:    buf3R2 = (char *) malloc(BUFSIZER2);
+Sinks: 
+	 line: 19:    buf3R2 = (char *) malloc(BUFSIZER2);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 24:    free(buf3R2);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example6.c
+Var name: ch_ptr
+line: 8:	ch_ptr = malloc(100);
+Sinks: 
+	 line: 8:	ch_ptr = malloc(100);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+	 line: 11:	free(ch_ptr);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Heap static route :::...  </span>
+File path: samplers/example6.c
+Var name: ch_ptr
+line: 13:	ch_ptr = malloc(500);
+Sinks: 
+	 line: 13:	ch_ptr = malloc(500);
+	 Taint: <span style="font-weight:bold;background-color:red;"> True </span>
+	 In Loop: false
+
+&gt;&gt;-----&gt; View end
+
+&gt;&gt;-----&gt; Start double free analyser
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Double free analyser :::...  </span>
+File path: samplers/example5.c
+<span style="font-weight:bold;background-color:red;"> Double free found! </span> 
+line: 8:	ch_ptr = malloc(100);
+line: 11:	free(ch_ptr);	
+line: 12:	free(ch_ptr);
+line: 6:	char *ch_ptr = NULL; 
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Double free analyser :::...  </span>
+File path: samplers/example2.c
+<span style="font-weight:bold;background-color:red;"> Double free found! </span> 
+Maybe the function to liberate memory can be in a loop context!
+line: 7:	ch_ptr=malloc(100);
+line: 11:		ch_ptr = 'A';
+line: 12:		free(ch_ptr);
+line: 13:		printf(&quot;%s\n&quot;, ch_ptr);
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Double free analyser :::...  </span>
+File path: samplers/example3.c
+<span style="font-weight:bold;background-color:red;"> Double free found! </span> 
+Maybe the function to liberate memory can be in a loop context!
+line: 18:	array3=realloc(400);
+line: 22:		array3='1';
+line: 24:		free(array3);
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Double free analyser :::...  </span>
+File path: samplers/example4.c
+<span style="font-weight:bold;background-color:red;"> Double free found! </span> 
+Maybe the function to liberate memory can be in a loop context!
+line: 8:	ch_ptr = malloc(100);
+line: 13:		ch_ptr = 'A';
+line: 14:		free(ch_ptr);
+line: 15:		printf(&quot;%s\n&quot;, ch_ptr);
+
+&gt;&gt;-----&gt; Start use after free analyser
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Use after free analyser :::...  </span>
+File path: samplers/example5.c
+<span style="font-weight:bold;background-color:red;"> Use after free found </span> 
+line: 8:	ch_ptr = malloc(100);
+line: 11:	free(ch_ptr);	
+line: 12:	free(ch_ptr);
+line: 6:	char *ch_ptr = NULL; 
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Use after free analyser :::...  </span>
+File path: samplers/example2.c
+<span style="font-weight:bold;background-color:red;"> Use after free found </span> 
+line: 7:	ch_ptr=malloc(100);
+line: 11:		ch_ptr = 'A';
+line: 12:		free(ch_ptr);
+line: 13:		printf(&quot;%s\n&quot;, ch_ptr);
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Use after free analyser :::...  </span>
+File path: samplers/example3.c
+<span style="font-weight:bold;background-color:red;"> Use after free found </span> 
+line: 10:	array = new int[100];
+line: 12:	delete array;
+line: 14:	array=(int *)2;
+line: 27:	array=malloc(1);
+
+ <span style="text-decoration:underline;"></span><span style="text-decoration:underline;background-color:#3333FF;"> ...::: Use after free analyser :::...  </span>
+File path: samplers/example4.c
+<span style="font-weight:bold;background-color:red;"> Use after free found </span> 
+line: 8:	ch_ptr = malloc(100);
+line: 13:		ch_ptr = 'A';
+line: 14:		free(ch_ptr);
+line: 15:		printf(&quot;%s\n&quot;, ch_ptr);
+</pre>
+</body>
+</html>
