@@ -14,8 +14,11 @@ $ cd heap_detective
 $ make
 // to run
 $ bin/heap_detective samplers/   
-note: don't try "$ cd bin; ./heap_detective"
+note:
+So don't try "$ cd bin; ./heap_detective"
+first argv is a directory for recursive analysis
 ```
+The first argument by command is a directory for recursive analysis.
 You can study bad practices in directory "samplers".
 
 ## Overview
