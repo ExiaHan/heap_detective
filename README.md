@@ -5,6 +5,13 @@ The second phase has a different approach to common lessons of the legendary dra
 
 The tool follows the KISS principle "Keep it simple, stupid!". There's more than one way to do a SAST tool, I know that. Yes, I thought to use graph database or AST, but this action cracked the KISS principle in the context of this project.
 
+# Features
+* C and C++ tokenizer
+* List of heap static routes for each source with taint points for analysis
+* Analyser to detect double free vulnerability
+* Analyser to detect use after free vulnerability
+
+
 To test, read the directory samplers to understand the context, so to run look that following:
 ```
 $ git clone https://github.com/CoolerVoid/heap_detective
@@ -20,6 +27,11 @@ first argv is a directory for recursive analysis
 ```
 The first argument by command is a directory for recursive analysis.
 You can study bad practices in directory "samplers".
+
+# Future features
+* Analyser to detect memory leak
+* Analyser to detect off-by-one vulnerability
+* Analyser to detect wild pointer
 
 ## Overview
 <img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/screen4.png">
