@@ -3,6 +3,46 @@
 #include "Detective.h"
 using namespace std;
 
+
+
+string Detective::get_func_name(string line)
+{
+	Tokenizer str;
+	string token,last;
+	str.set(line,"(");
+	token = str.next();
+	str.set(token," ");
+	token = str.next();
+
+		while(token.size() >0)
+		{
+			last=token;
+			token = str.next();
+		}
+
+	return last;
+}
+
+bool Detective::is_func(string line)
+{
+	char *pos1,*pos2,*pos3;
+	char *ch=(char *)line.c_str();
+	pos1= strchr(ch, '(');
+
+	if(pos1)
+	{
+		pos2 = strchr(ch,')');
+		if(pos2)
+		{
+			pos3 = strchr(ch,';');
+			if (((pos1 < pos2) && (pos3 == NULL)) || (pos3 < pos1))
+				return true;			
+		}
+	}
+
+	return false;
+}
+
 bool Detective::end_exp(string line)
 {
 	bool test=false;
@@ -86,9 +126,10 @@ void Detective::get_all_sinks()
 
 void Detective::get_sinks(string FileName)
 {
-	string line;
+	string line,func_name;
+	string last_func="";
 	ifstream file;
-	bool have_var=false,filename_test=false;	
+	bool have_var=false,filename_test=false,have_func=false, have_loop=false;	
 	size_t pos2=0,pos3=0,line_counter=1,found_char=0,count_functions=0;
 
 
@@ -108,10 +149,15 @@ void Detective::get_sinks(string FileName)
 		while(getline(file, line))
 		{
 
+			have_loop=loop_check(line);
+			have_func=is_func(line);
+
+			if(have_func==true && have_loop == false)
+				func_name=get_func_name(line);
 /*
  **TODO add LOOP detector to insert loop element at struct sink..
 */
-			loop_counter+=loop_check(line)==true?1:0;
+			loop_counter+=have_loop==true?1:0;
 			loop_counter-=(end_exp(line)==true)?1:0;
 			have_var=false;
 			// loop_counter+=cond_check(line)==true?1:0;
@@ -119,7 +165,7 @@ void Detective::get_sinks(string FileName)
 	
 			found_char = line.find_first_of('=');
 
-			if(found_char!=string::npos)
+			if(found_char!=string::npos && strcmp(last_func.c_str(),func_name.c_str()))
 			{
 				count_functions=0;
 
@@ -136,12 +182,14 @@ void Detective::get_sinks(string FileName)
       						if(array.size() != SIZE_MAX)
 						{	
  							array.push_back(startpoint());
+							array[pos].func_name = func_name;
 							array[pos].filename = FileName;
 							array[pos].var_name = token;
 							array[pos].line = line;
 							array[pos].line_number = line_counter;
 							pos3=pos;
 							pos++;
+							last_func=func_name;
 						} else {
 							HEAP_DETECTIVE_DEBUG("ERROR: Out of limit in array vector var");
 							exit(0);
@@ -248,7 +296,8 @@ void Detective::view_sinks()
 	{
 
 		cout << "\n \u001b[4m\u001b[44m ...::: Heap static route :::...  \u001b[0m\n";	
-		cout << "File path: " << array[x].filename << "\n";			
+		cout << "File path: " << array[x].filename << "\n";
+		cout << "Func name: " << array[x].func_name << "\n";			
 		cout << "Var name: " << array[x].var_name << "\n";			
 		cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";			
 		cout << "Sinks: \n";
@@ -270,7 +319,7 @@ void Detective::view_sinks()
 }
 
 
-void Detective::list_var_by_filename(string filename, string varname)
+void Detective::list_var_by_filename(string filename, string varname, string funcname)
 {
 
 	size_t x=0,y=0;
@@ -280,7 +329,7 @@ void Detective::list_var_by_filename(string filename, string varname)
 	while(x != array.size())
 	{
 
-		if((!strcmp(array[x].filename.c_str(),filename.c_str())) && !strcmp(array[x].var_name.c_str(),varname.c_str()))
+		if((!strcmp(array[x].filename.c_str(),filename.c_str())) && !strcmp(array[x].var_name.c_str(),varname.c_str()) && !strcmp(array[x].func_name.c_str(),funcname.c_str())  )
 		{
 
 			cout << "line: " << array[x].line_number << ":" << array[x].line << "\n";		
@@ -317,13 +366,14 @@ void Detective::double_free()
 			if(counter_free>=2)
 			{
 				cout << "\n \u001b[4m\u001b[44m ...::: Double free analyser :::...  \u001b[0m\n";	
-				cout << "File path: " << array[x].filename << "\n";		
+				cout << "File path: " << array[x].filename << "\n";
+				cout << "Function name: " << array[x].func_name << "\n";
 				cout << "\u001b[41;1m Double free found! \u001b[0m \n";	
 
 				if(counter_free>=5)
 					cout << "Maybe the function to liberate memory can be in a loop context!\n";
 
-				list_var_by_filename(array[x].filename , array[x].var_name );			
+				list_var_by_filename(array[x].filename , array[x].var_name, array[x].func_name );			
 				counter_free=0;
 			}
 			y++;
@@ -339,6 +389,7 @@ void Detective::double_free()
 
 void Detective::use_after_free()
 {
+	bool test=false;
 	size_t x=0,y=0;
 	short int counter_free=0;
 	size_t number_line=0;
@@ -348,10 +399,10 @@ void Detective::use_after_free()
 	while(x != array.size())
 	{
 
-		while(y != array[x].sinks.size() )
+		while(y != array[x].sinks.size() && test == false)
 		{
 
-			if(counter_free && array[x].line_number != array[x].sinks[y].line_number )
+			if(counter_free && array[x].line_number != array[x].sinks[y].line_number)
 			{
 
 				if((!strcmp(array[x].var_name.c_str(),last_var.c_str())) && number_line > array[x].line_number && number_line < array[x].sinks[y].line_number )
@@ -359,9 +410,11 @@ void Detective::use_after_free()
 
 
 					cout << "\n \u001b[4m\u001b[44m ...::: Use after free analyser :::...  \u001b[0m\n";	
-					cout << "File path: " << array[x].filename << "\n";		
+					cout << "File path: " << array[x].filename << "\n";	
+					cout << "Function name: " << array[x].func_name << "\n";
 					cout << "\u001b[41;1m Use after free found \u001b[0m \n";
-					list_var_by_filename(array[x].filename , array[x].var_name );			
+					list_var_by_filename(array[x].filename , array[x].var_name, array[x].func_name );
+					test=true;			
 				}		
 			}
 
@@ -375,6 +428,7 @@ void Detective::use_after_free()
 			}
 			y++;
 		}
+		test=false;
 //		counter_free=0;
 		y=0;			
 		x++;

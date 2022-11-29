@@ -38,6 +38,7 @@ struct sink {
 };
 
 struct startpoint {
+	string func_name;
  	size_t line_number;
 	string filename;
  	string var_name;
@@ -59,6 +60,8 @@ public:
 	vector<startpoint> array;
 	vector<sink> sinks;
 	size_t pos=0;
+	bool is_func(string line);
+	string get_func_name(string line);
         bool loop_check(string line);
         bool condition_check(string line);
 	// todo add flow end check
@@ -70,7 +73,7 @@ public:
 	void get_all_sinks();
 	void get_sinks(string FileName);                                     
 	void view_sinks(); 
-	void list_var_by_filename(string filename, string varname);
+	void list_var_by_filename(string filename, string varname, string funcname);
 	void double_free();
 	void use_after_free();
 	void clear_sinks();                                     

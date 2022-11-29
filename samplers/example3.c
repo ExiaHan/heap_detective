@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 	int *array = NULL;
         char *array3 = NULL;
 
-	array = new int[100];
+	array = new obj[100];
 
 	delete array;
 
@@ -24,7 +24,10 @@ int main(int argc, char **argv)
 		free(array3);
 	}
 
-	array=malloc(1);
+	array = malloc(1);
+	array=2;
+
+	array = malloc(3);
 
 	return 0;
 }
