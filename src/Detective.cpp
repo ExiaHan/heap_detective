@@ -3,7 +3,16 @@
 #include "Detective.h"
 using namespace std;
 
-
+bool Detective::is_comment(string line)
+{
+		if (line[0] == '/' && line[1] == '/' && line[2] != '/') 
+        		return true;
+ 
+    		if (line[line.size() - 2] == '*' && line[line.size() - 1] == '/' && line[0] == '/' && line[1] == '*') 
+			return true;
+    
+	return false;
+}
 
 string Detective::get_func_name(string line)
 {
@@ -126,7 +135,7 @@ void Detective::get_all_sinks()
 
 void Detective::get_sinks(string FileName)
 {
-	string line,func_name;
+	string line,func_name,tmp_func;
 	string last_func="";
 	ifstream file;
 	bool have_var=false,filename_test=false,have_func=false, have_loop=false;	
@@ -148,12 +157,19 @@ void Detective::get_sinks(string FileName)
 
 		while(getline(file, line))
 		{
+			if(is_comment(line)==true)
+				goto END_VIEW_DETECTIVE;
 
 			have_loop=loop_check(line);
 			have_func=is_func(line);
 
 			if(have_func==true && have_loop == false)
-				func_name=get_func_name(line);
+			{
+				tmp_func=get_func_name(line);
+				
+				if(condition_check(tmp_func)==false)
+					func_name=tmp_func;
+			}
 /*
  **TODO add LOOP detector to insert loop element at struct sink..
 */

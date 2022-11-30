@@ -60,6 +60,7 @@ public:
 	vector<startpoint> array;
 	vector<sink> sinks;
 	size_t pos=0;
+	bool is_comment(string line);
 	bool is_func(string line);
 	string get_func_name(string line);
         bool loop_check(string line);

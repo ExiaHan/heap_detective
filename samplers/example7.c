@@ -10,10 +10,12 @@ static char special(char * test)
 	int i=0;
 	i=1000;
 
-	free(ch_ptr);	
-	ch_ptr = malloc(500);
-	ch_ptr=NULL;
-
+	if(i) {
+	
+		free(ch_ptr);	
+		ch_ptr = malloc(500);
+		ch_ptr=NULL;
+	}
 	return " ";
 }
 

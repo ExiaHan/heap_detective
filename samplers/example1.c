@@ -18,8 +18,19 @@ int main(int argc, char **argv) {
     buf2R2 = (char *) malloc(BUFSIZER2);
     buf3R2 = (char *) malloc(BUFSIZER2);
 
-    strncpy(buf2R1, argv[1], BUFSIZER1-1);
+    if ( buf3R2==NULL )
+    {
+	free(buf3R2);
+    	strncpy(buf2R1, argv[1], BUFSIZER1-1);
+    }
     free(buf1R1);
     free(buf2R2);
-    free(buf3R2);
+//    free(buf3R2);
+
+    if (buf1R1) {
+	free(buf1R1);
+	return 1;
+    }
+
+    return 0;
 }
