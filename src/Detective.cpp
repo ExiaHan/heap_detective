@@ -5,7 +5,7 @@ using namespace std;
 
 bool Detective::is_comment(string line)
 {
-		if (line[0] == '/' && line[1] == '/' && line[2] != '/') 
+		if (line[0] == '/' && line[1] == '/') 
         		return true;
  
     		if (line[line.size() - 2] == '*' && line[line.size() - 1] == '/' && line[0] == '/' && line[1] == '*') 
