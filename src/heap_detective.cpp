@@ -26,7 +26,10 @@ int main(int argc, char* argv[])
 
 		// Show Heap routes
 		obj->view_sinks();	
-		cout << "\n>>-----> View end\n";
+
+		// Memory leak vulnerability finder
+		cout << "\n>>-----> Memory leak analyser\n"; 
+		obj->memory_leak();	
 
 		// Double free vulnerability finder
 		cout << "\n>>-----> Start double free analyser\n";

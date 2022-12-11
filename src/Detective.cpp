@@ -52,6 +52,23 @@ bool Detective::is_func(string line)
 	return false;
 }
 
+
+
+bool Detective::start_exp(string line)
+{
+	bool test=false;
+	size_t len=line.size();
+
+		if( line[len-1]==')' || line[len-2]==')')
+			test=true;
+
+
+		if( line[len-1]=='{' || line[len-2]=='{')
+			test=true;
+
+	return test;
+}
+
 bool Detective::end_exp(string line)
 {
 	bool test=false;
@@ -160,8 +177,8 @@ void Detective::get_sinks(string FileName)
 			if(is_comment(line)==true)
 				goto END_VIEW_DETECTIVE;
 
-			have_loop=loop_check(line);
 			have_func=is_func(line);
+			have_loop=(loop_check(line)==true&&have_func==false&&start_exp(line)==true)?true:false;
 
 			if(have_func==true && have_loop == false)
 			{
@@ -195,11 +212,17 @@ void Detective::get_sinks(string FileName)
 						string token;
 						str.set(line);
 						token = str.next();
+						
+					       	
+						if(have_func==false && line.find("new")!=string::npos)
+							token = str.next();
+						
       						if(array.size() != SIZE_MAX)
 						{	
  							array.push_back(startpoint());
 							array[pos].func_name = func_name;
 							array[pos].filename = FileName;
+							erase(token, '*');
 							array[pos].var_name = token;
 							array[pos].line = line;
 							array[pos].line_number = line_counter;
@@ -263,6 +286,7 @@ void Detective::get_sinks(string FileName)
 					if(!heap_out[count_functions].empty())
 						if ( (line.find(heap_out[count_functions],0)!=string::npos)&&(filename_test==true)&&(have_var==true) && (line.find(array[pos3].var_name,0)!=string::npos))
 						{
+
 							sink makestruct2 = {array[pos2].var_name,line,line_counter,true,loop_counter>=1?true:false,true,false};
 
       							if(array[pos3].sinks.size() != SIZE_MAX)
@@ -450,6 +474,54 @@ void Detective::use_after_free()
 		x++;
 	}
 }
+
+
+
+void Detective::memory_leak()
+{
+	size_t x=0,y=0;
+	short int counter_liberate=0,counter_allocate=0;
+
+	while(x != array.size())
+	{
+
+		while(y != array[x].sinks.size() )
+		{
+
+			if(array[x].sinks[y].liberate==true)
+				counter_liberate+=array[x].sinks[y].inloop==true?5:1;
+		
+
+			if(array[x].sinks[y].allocate==true)
+				counter_allocate+=array[x].sinks[y].inloop==true?5:1;
+			y++;
+		}
+
+		if(counter_allocate!=counter_liberate)
+		{
+
+			cout << "\n \u001b[4m\u001b[44m ...::: Memory leak analyser :::...  \u001b[0m\n";	
+			cout << "File path: " << array[x].filename << "\n";
+			cout << "Function name: " << array[x].func_name << "\n";
+			cout << "\u001b[41;1m memory leak found! \u001b[0m \n";	
+
+			if(counter_liberate>=5)
+				cout << "Maybe the function to liberate memory can be in a loop context!\n";
+
+			if(counter_allocate>=5)
+				cout << "Maybe the function to liberate memory can be in a loop context!\n";
+
+			list_var_by_filename(array[x].filename , array[x].var_name, array[x].func_name );			
+		}
+
+		counter_liberate=0;
+		counter_allocate=0;
+		y=0;			
+		x++;
+	}
+}
+
+
 
 // free all context from memory
 void Detective::clear_sinks()
