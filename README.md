@@ -40,15 +40,44 @@ You can study bad practices in directory "samplers".
 ## Overview
 <img align="center" width="840" height="500" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_199.png">
 <img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_198.png">
-<img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_196.png">
+<img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_196.png"
 
+Output example:
 ```
+
 
 
 Collect action done
 
   ...::: Heap static route :::...  
+File path: samplers/example3.c
+Func name: main
+Var name: new
+line: 10:	array = new obj[100];
+Sinks: 
+	 line: 10:	array = new obj[100];
+	 Taint:  True 
+	 In Loop: false
+
+  ...::: Heap static route :::...  
+File path: samplers/example3.c
+Func name: 	while
+Var name: array
+line: 27:	array = malloc(1);
+Sinks: 
+	 line: 27:	array = malloc(1);
+	 Taint:  True 
+	 In Loop: false
+	 line: 28:	array=2;
+	 Taint: false
+	 In Loop: false
+	 line: 30:	array = malloc(3);
+	 Taint:  True 
+	 In Loop: false
+
+  ...::: Heap static route :::...  
 File path: samplers/example5.c
+Func name: main
 Var name: ch_ptr
 line: 8:	ch_ptr = malloc(100);
 Sinks: 
@@ -61,18 +90,29 @@ Sinks:
 	 line: 12:	free(ch_ptr);
 	 Taint:  True 
 	 In Loop: false
-	 line: 6:	char *ch_ptr = NULL; 
+
+  ...::: Heap static route :::...  
+File path: samplers/example1.c
+Func name: main
+Var name: buf1R1
+line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+Sinks: 
+	 line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+	 Taint:  True 
+	 In Loop: false
+	 line: 26:    free(buf1R1);
+	 Taint:  True 
+	 In Loop: false
+	 line: 30:    if (buf1R1) {
 	 Taint: false
 	 In Loop: false
-	 line: 6:	char *ch_ptr = NULL;
-	 Taint: false
-	 In Loop: false
-	 line: 6:	char *ch_ptr = NULL;
-	 Taint: false
+	 line: 31:	free(buf1R1);
+	 Taint:  True 
 	 In Loop: false
 
   ...::: Heap static route :::...  
 File path: samplers/example2.c
+Func name: main
 Var name: ch_ptr
 line: 7:	ch_ptr=malloc(100);
 Sinks: 
@@ -90,46 +130,8 @@ Sinks:
 	 In Loop:  True 
 
   ...::: Heap static route :::...  
-File path: samplers/example3.c
-Var name: array
-line: 10:	array = new int[100];
-Sinks: 
-	 line: 10:	array = new int[100];
-	 Taint:  True 
-	 In Loop: false
-	 line: 12:	delete array;
-	 Taint:  True 
-	 In Loop: false
-	 line: 14:	array=(int *)2;
-	 Taint: false
-	 In Loop: false
-
-  ...::: Heap static route :::...  
-File path: samplers/example3.c
-Var name: array3
-line: 18:	array3=realloc(400);
-Sinks: 
-	 line: 18:	array3=realloc(400);
-	 Taint:  True 
-	 In Loop: false
-	 line: 22:		array3='1';
-	 Taint: false
-	 In Loop:  True 
-	 line: 24:		free(array3);
-	 Taint:  True 
-	 In Loop:  True 
-
-  ...::: Heap static route :::...  
-File path: samplers/example3.c
-Var name: array
-line: 27:	array=malloc(1);
-Sinks: 
-	 line: 27:	array=malloc(1);
-	 Taint:  True 
-	 In Loop: false
-
-  ...::: Heap static route :::...  
 File path: samplers/example4.c
+Func name: main
 Var name: ch_ptr
 line: 8:	ch_ptr = malloc(100);
 Sinks: 
@@ -138,58 +140,17 @@ Sinks:
 	 In Loop: false
 	 line: 13:		ch_ptr = 'A';
 	 Taint: false
-	 In Loop:  True 
+	 In Loop: false
 	 line: 14:		free(ch_ptr);
 	 Taint:  True 
-	 In Loop:  True 
+	 In Loop: false
 	 line: 15:		printf("%s\n", ch_ptr);
 	 Taint: false
-	 In Loop:  True 
-
-  ...::: Heap static route :::...  
-File path: samplers/example1.c
-Var name: buf1R1
-line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
-Sinks: 
-	 line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
-	 Taint:  True 
-	 In Loop: false
-
-  ...::: Heap static route :::...  
-File path: samplers/example1.c
-Var name: buf2R1
-line: 14:    buf2R1 = (char *) malloc(BUFSIZER1);
-Sinks: 
-	 line: 14:    buf2R1 = (char *) malloc(BUFSIZER1);
-	 Taint:  True 
-	 In Loop: false
-	 line: 16:    free(buf2R1);
-	 Taint:  True 
-	 In Loop: false
-
-  ...::: Heap static route :::...  
-File path: samplers/example1.c
-Var name: buf2R2
-line: 18:    buf2R2 = (char *) malloc(BUFSIZER2);
-Sinks: 
-	 line: 18:    buf2R2 = (char *) malloc(BUFSIZER2);
-	 Taint:  True 
-	 In Loop: false
-
-  ...::: Heap static route :::...  
-File path: samplers/example1.c
-Var name: buf3R2
-line: 19:    buf3R2 = (char *) malloc(BUFSIZER2);
-Sinks: 
-	 line: 19:    buf3R2 = (char *) malloc(BUFSIZER2);
-	 Taint:  True 
-	 In Loop: false
-	 line: 24:    free(buf3R2);
-	 Taint:  True 
 	 In Loop: false
 
   ...::: Heap static route :::...  
 File path: samplers/example6.c
+Func name: main
 Var name: ch_ptr
 line: 8:	ch_ptr = malloc(100);
 Sinks: 
@@ -199,66 +160,168 @@ Sinks:
 	 line: 11:	free(ch_ptr);
 	 Taint:  True 
 	 In Loop: false
-
-  ...::: Heap static route :::...  
-File path: samplers/example6.c
-Var name: ch_ptr
-line: 13:	ch_ptr = malloc(500);
-Sinks: 
 	 line: 13:	ch_ptr = malloc(500);
 	 Taint:  True 
 	 In Loop: false
 
->>-----> View end
+  ...::: Heap static route :::...  
+File path: samplers/example7.c
+Func name: special
+Var name: ch_ptr
+line: 8:	ch_ptr = malloc(100);
+Sinks: 
+	 line: 8:	ch_ptr = malloc(100);
+	 Taint:  True 
+	 In Loop: false
+	 line: 15:		free(ch_ptr);	
+	 Taint:  True 
+	 In Loop: false
+	 line: 16:		ch_ptr = malloc(500);
+	 Taint:  True 
+	 In Loop: false
+	 line: 17:		ch_ptr=NULL;
+	 Taint: false
+	 In Loop: false
+	 line: 25:	char *ch_ptr = NULL;
+	 Taint: false
+	 In Loop: false
+
+  ...::: Heap static route :::...  
+File path: samplers/example7.c
+Func name: main
+Var name: ch_ptr
+line: 27:	ch_ptr = malloc(100);
+Sinks: 
+	 line: 27:	ch_ptr = malloc(100);
+	 Taint:  True 
+	 In Loop: false
+	 line: 30:	free(ch_ptr);
+	 Taint:  True 
+	 In Loop: false
+	 line: 32:	ch_ptr = malloc(500);
+	 Taint:  True 
+	 In Loop: false
+
+>>-----> Memory leak analyser
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example3.c
+Function name: main
+ memory leak found!  
+line: 10:	array = new obj[100];
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example3.c
+Function name: 	while
+ memory leak found!  
+line: 27:	array = malloc(1);
+line: 28:	array=2;
+line: 30:	array = malloc(3);
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example5.c
+Function name: main
+ memory leak found!  
+line: 8:	ch_ptr = malloc(100);
+line: 11:	free(ch_ptr);	
+line: 12:	free(ch_ptr);
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example1.c
+Function name: main
+ memory leak found!  
+line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+line: 26:    free(buf1R1);
+line: 30:    if (buf1R1) {
+line: 31:	free(buf1R1);
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example2.c
+Function name: main
+ memory leak found!  
+Maybe the function to liberate memory can be in a loop context!
+line: 7:	ch_ptr=malloc(100);
+line: 11:		ch_ptr = 'A';
+line: 12:		free(ch_ptr);
+line: 13:		printf("%s\n", ch_ptr);
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example6.c
+Function name: main
+ memory leak found!  
+line: 8:	ch_ptr = malloc(100);
+line: 11:	free(ch_ptr);
+line: 13:	ch_ptr = malloc(500);
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example7.c
+Function name: special
+ memory leak found!  
+line: 8:	ch_ptr = malloc(100);
+line: 15:		free(ch_ptr);	
+line: 16:		ch_ptr = malloc(500);
+line: 17:		ch_ptr=NULL;
+line: 25:	char *ch_ptr = NULL;
+
+  ...::: Memory leak analyser :::...  
+File path: samplers/example7.c
+Function name: main
+ memory leak found!  
+line: 27:	ch_ptr = malloc(100);
+line: 30:	free(ch_ptr);
+line: 32:	ch_ptr = malloc(500);
 
 >>-----> Start double free analyser
 
   ...::: Double free analyser :::...  
 File path: samplers/example5.c
+Function name: main
  Double free found!  
 line: 8:	ch_ptr = malloc(100);
 line: 11:	free(ch_ptr);	
 line: 12:	free(ch_ptr);
-line: 6:	char *ch_ptr = NULL; 
+
+  ...::: Double free analyser :::...  
+File path: samplers/example1.c
+Function name: main
+ Double free found!  
+line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+line: 26:    free(buf1R1);
+line: 30:    if (buf1R1) {
+line: 31:	free(buf1R1);
 
   ...::: Double free analyser :::...  
 File path: samplers/example2.c
+Function name: main
  Double free found!  
 Maybe the function to liberate memory can be in a loop context!
 line: 7:	ch_ptr=malloc(100);
 line: 11:		ch_ptr = 'A';
 line: 12:		free(ch_ptr);
 line: 13:		printf("%s\n", ch_ptr);
-
-  ...::: Double free analyser :::...  
-File path: samplers/example3.c
- Double free found!  
-Maybe the function to liberate memory can be in a loop context!
-line: 18:	array3=realloc(400);
-line: 22:		array3='1';
-line: 24:		free(array3);
-
-  ...::: Double free analyser :::...  
-File path: samplers/example4.c
- Double free found!  
-Maybe the function to liberate memory can be in a loop context!
-line: 8:	ch_ptr = malloc(100);
-line: 13:		ch_ptr = 'A';
-line: 14:		free(ch_ptr);
-line: 15:		printf("%s\n", ch_ptr);
 
 >>-----> Start use after free analyser
 
   ...::: Use after free analyser :::...  
 File path: samplers/example5.c
+Function name: main
  Use after free found  
 line: 8:	ch_ptr = malloc(100);
 line: 11:	free(ch_ptr);	
 line: 12:	free(ch_ptr);
-line: 6:	char *ch_ptr = NULL; 
+
+  ...::: Use after free analyser :::...  
+File path: samplers/example1.c
+Function name: main
+ Use after free found  
+line: 13:    buf1R1 = (char *) malloc(BUFSIZER1);
+line: 26:    free(buf1R1);
+line: 30:    if (buf1R1) {
+line: 31:	free(buf1R1);
 
   ...::: Use after free analyser :::...  
 File path: samplers/example2.c
+Function name: main
  Use after free found  
 line: 7:	ch_ptr=malloc(100);
 line: 11:		ch_ptr = 'A';
@@ -266,20 +329,41 @@ line: 12:		free(ch_ptr);
 line: 13:		printf("%s\n", ch_ptr);
 
   ...::: Use after free analyser :::...  
-File path: samplers/example3.c
- Use after free found  
-line: 10:	array = new int[100];
-line: 12:	delete array;
-line: 14:	array=(int *)2;
-line: 27:	array=malloc(1);
-
-  ...::: Use after free analyser :::...  
 File path: samplers/example4.c
+Function name: main
  Use after free found  
 line: 8:	ch_ptr = malloc(100);
 line: 13:		ch_ptr = 'A';
 line: 14:		free(ch_ptr);
 line: 15:		printf("%s\n", ch_ptr);
+
+  ...::: Use after free analyser :::...  
+File path: samplers/example6.c
+Function name: main
+ Use after free found  
+line: 8:	ch_ptr = malloc(100);
+line: 11:	free(ch_ptr);
+line: 13:	ch_ptr = malloc(500);
+
+  ...::: Use after free analyser :::...  
+File path: samplers/example7.c
+Function name: special
+ Use after free found  
+line: 8:	ch_ptr = malloc(100);
+line: 15:		free(ch_ptr);	
+line: 16:		ch_ptr = malloc(500);
+line: 17:		ch_ptr=NULL;
+line: 25:	char *ch_ptr = NULL;
+
+  ...::: Use after free analyser :::...  
+File path: samplers/example7.c
+Function name: main
+ Use after free found  
+line: 27:	ch_ptr = malloc(100);
+line: 30:	free(ch_ptr);
+line: 32:	ch_ptr = malloc(500);
+
+
 
 
 ```
