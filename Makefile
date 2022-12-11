@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall --std=c++20 -O2 
+CFLAGS=-Wall --std=c++2a -O2 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	LDFLAGS=-Wl 
