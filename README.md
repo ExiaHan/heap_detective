@@ -5,6 +5,8 @@ The second phase has a different approach to common lessons of the legendary dra
 
 The tool follows the KISS principle "Keep it simple, stupid!". There's more than one way to do a SAST tool, I know that. Yes, I thought to use graph database or AST, but this action cracked the KISS principle in the context of this project.
 
+https://antonio-cooler.gitbook.io/coolervoid-tavern/detecting-heap-memory-pitfalls
+
 # Features
 * C and C++ tokenizer
 * List of heap static routes for each source with taint points for analysis
