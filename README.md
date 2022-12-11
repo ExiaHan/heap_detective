@@ -10,7 +10,7 @@ The tool follows the KISS principle "Keep it simple, stupid!". There's more than
 * List of heap static routes for each source with taint points for analysis
 * Analyser to detect double free vulnerability
 * Analyser to detect use after free vulnerability
-
+* Analyser to detect memory leak
 
 To test, read the directory samplers to understand the context, so to run look that following:
 ```
@@ -29,7 +29,6 @@ The first argument by command is a directory for recursive analysis.
 You can study bad practices in directory "samplers".
 
 # Future features
-* Analyser to detect memory leak
 * Analyser to detect off-by-one vulnerability
 * Analyser to detect wild pointer
 * Analyser to detect heap overflow vulnerability
