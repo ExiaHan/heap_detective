@@ -26,6 +26,8 @@ $ bin/heap_detective samplers/
 note:
 So don't try "$ cd bin; ./heap_detective"
 first argv is a directory for recursive analysis
+
+Note: tested in GCC 9 and 11
 ```
 The first argument by command is a directory for recursive analysis.
 You can study bad practices in directory "samplers".
