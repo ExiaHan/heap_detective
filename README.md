@@ -38,10 +38,9 @@ You can study bad practices in directory "samplers".
 * Analyser to detect heap overflow vulnerability
 
 ## Overview
-<img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/screen4.png">
 <img align="center" width="840" height="500" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_199.png">
 <img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_198.png">
-<img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_197.png">
+<img align="center" width="840" height="720" src="https://github.com/CoolerVoid/heap_detective/blob/master/doc/Screenshot_196.png">
 
 ```
 
