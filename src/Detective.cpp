@@ -184,7 +184,7 @@ void Detective::get_sinks(string FileName)
 			{
 				tmp_func=get_func_name(line);
 				
-				if(condition_check(tmp_func)==false)
+				if(condition_check(tmp_func)==false && loop_check(tmp_func)==false)
 					func_name=tmp_func;
 			}
 /*
