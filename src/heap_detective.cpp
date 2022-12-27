@@ -17,6 +17,9 @@ int main(int argc, char* argv[])
 		exit(0);	
 	}
 
+	if(strnlen(argv[1],2048)>=2047)
+		exit(0);
+
 	try {
 		// Tokenize and collect routes of Heap calls
 		Detective *obj = new Detective;
@@ -42,6 +45,7 @@ int main(int argc, char* argv[])
 		// liberate all heap memory 
         	obj->clear_sinks();
 		delete obj;
+		obj=NULL;
 
 	} catch (const char* msg) {
 
